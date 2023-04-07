@@ -1,0 +1,7 @@
+# calmap==0.0.11
+datetime==4.3
+numpy==1.23.4
+matplotlib==3.4.3
+pandas==1.5.2
+seaborn==0.12.1
+streamlit==1.19.0
