@@ -262,7 +262,7 @@ if show_fig3:
     st.markdown("### Calendar heatmap")
     st.markdown("Note that the heatmap shows gaps between months. \
                 This is the issue due to Seaborn heatmap. It can be fixed by using `calmap` package to create the heatmap. \
-                I did not use calmap because it is not easily compatible with Streamlit. \ ")
+                I did not use calmap because it is not easily compatible with Streamlit. ")
     st.pyplot(fig3_1)
     st.pyplot(fig3_2)
 
