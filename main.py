@@ -24,7 +24,7 @@ st.set_page_config(layout="wide")
 st.markdown("# PhD's Daily Progress Records")
 
 st.markdown("## Introduction") 
-intro = "Doing PhD is a challenging. It becomes even more challenging when you approach the end of it. \
+intro = "Doing PhD is challenging. It becomes even more challenging when you approach the end of it. \
             You have to wrap up your research, write many papers and prepare your thesis. \
             \nTo make sure I am on track, I set up a daily standup meeting with my colleague and recorded my daily progress in a spreadsheet. \
             \nThis app is to visualize the data and help me to track my progress. "
