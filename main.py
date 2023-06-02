@@ -13,7 +13,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import datetime
-# import calmap
+import calmap
 import streamlit as st
 
 
@@ -181,82 +181,83 @@ if show_fig2:
 # """
 # Calendar heatmap with calmap
 # """
-# hrs_by_date = dat[['Date', 'TotalTime']]
-# # set date as index
-# hrs_by_date.set_index('Date', inplace=True)
-# hrs_by_date.index = pd.to_datetime(hrs_by_date.index)
+hrs_by_date = dat[['Date', 'TotalTime']]
+# set date as index
+hrs_by_date.set_index('Date', inplace=True)
+hrs_by_date.index = pd.to_datetime(hrs_by_date.index)
 
-# fig3_1, axes = calmap.calendarplot(hrs_by_date.groupby('Date')['TotalTime'].sum(), fig_kws={'figsize': (12, 6)})
-# plt.title('Total Time Spent on Tasks')
+fig3_1, axes = calmap.calendarplot(hrs_by_date.groupby('Date')['TotalTime'].sum(), fig_kws={'figsize': (12, 6)})
+plt.title('Total Time Spent on Tasks')
 
-# productivity_by_date = dat[['Date', 'ProductivityRating (1-5)']]
-# # set date as index
-# productivity_by_date.set_index('Date', inplace=True)
-# productivity_by_date.index = pd.to_datetime(productivity_by_date.index)
-# fig3_2, axes = calmap.calendarplot(productivity_by_date.groupby('Date')['ProductivityRating (1-5)'].sum(), fig_kws={'figsize': (12, 6)})
-# plt.title('Productivity Rating (1-5)')
+productivity_by_date = dat[['Date', 'ProductivityRating (1-5)']]
+# set date as index
+productivity_by_date.set_index('Date', inplace=True)
+productivity_by_date.index = pd.to_datetime(productivity_by_date.index)
+fig3_2, axes = calmap.calendarplot(productivity_by_date.groupby('Date')['ProductivityRating (1-5)'].sum(), fig_kws={'figsize': (12, 6)})
+plt.title('Productivity Rating (1-5)')
 
 # """
 # Calendar heatmap with seaborn
 # """
 
-# Seaborn version
 
-def create_heatmap(val):
-# Format the data for the heatmap
-    val_by_date = dat[['Date', val]]
+# def create_heatmap(val):
+# # Format the data for the heatmap
+#     val_by_date = dat[['Date', val]]
 
-    # init_val[val] = init_val['Date'].map(val_by_date.set_index('Date')[val])
-    # concat the two df vertically
-    # val_by_date = pd.concat([val_by_date, init_val], axis=0)
+#     # init_val[val] = init_val['Date'].map(val_by_date.set_index('Date')[val])
+#     # concat the two df vertically
+#     # val_by_date = pd.concat([val_by_date, init_val], axis=0)
 
-    # the day before the first date in the df
-    if val_by_date['Date'].min() == '2023-1-1':
-        prev_day = '2023-1-1'
-    else:
-        prev_day = val_by_date['Date'].min() - datetime.timedelta(days=1)
+#     # the day before the first date in the df
+#     if val_by_date['Date'].min() == '2023-1-1':
+#         prev_day = '2023-1-1'
+#     else:
+#         prev_day = val_by_date['Date'].min() - datetime.timedelta(days=1)
     
-    # the next day of the date in the df
-    if val_by_date['Date'].max() == '2023-6-30':
-        next_day = '2023-6-30'
-    else:
-        next_day = val_by_date['Date'].max() + datetime.timedelta(days=1)
+#     # the next day of the date in the df
+#     if val_by_date['Date'].max() == '2023-6-30':
+#         next_day = '2023-6-30'
+#     else:
+#         next_day = val_by_date['Date'].max() + datetime.timedelta(days=1)
 
-    val_by_date = pd.concat([pd.DataFrame({'Date': pd.date_range(start='2023-1-1', end=prev_day), val: None}),
-                             val_by_date, 
-                             pd.DataFrame({'Date': pd.date_range(start=next_day, end='2023-6-30'), val: None})], axis=0)
+#     val_by_date = pd.concat([pd.DataFrame({'Date': pd.date_range(start='2023-1-1', end=prev_day), val: None}),
+#                              val_by_date, 
+#                              pd.DataFrame({'Date': pd.date_range(start=next_day, end='2023-6-30'), val: None})], axis=0)
 
-    val_by_date["Date"] = pd.to_datetime(val_by_date["Date"])
-    val_by_date['weekday'] = val_by_date['Date'].dt.dayofweek
-    val_by_date['month'] = val_by_date['Date'].dt.month
-    val_by_date['week'] = val_by_date['Date'].dt.isocalendar().week
-    val_by_date_calmap = val_by_date.pivot_table(index='weekday', columns=['month', 'week'], values=val, aggfunc='sum')
-    # fill the nan with 0
-    val_by_date_calmap = val_by_date_calmap.fillna(1e-2)
-    return val_by_date_calmap
+#     val_by_date["Date"] = pd.to_datetime(val_by_date["Date"])
+#     val_by_date['weekday'] = val_by_date['Date'].dt.dayofweek
+#     val_by_date['month'] = val_by_date['Date'].dt.month
+#     val_by_date['week'] = val_by_date['Date'].dt.isocalendar().week
+#     val_by_date_calmap = val_by_date.pivot_table(index='weekday', columns=['month', 'week'], values=val, aggfunc='sum')
+#     # fill the nan with 0
+#     val_by_date_calmap = val_by_date_calmap.fillna(1e-2)
+#     return val_by_date_calmap
 
-# Create the heatmap
-fig3_1, ax3_1 = plt.subplots(figsize=(12, 2.2))
-sns.heatmap(create_heatmap('TotalTime'), cmap='YlGnBu', linewidths=0.5, ax=ax3_1)
-# change the number of xticks as the number of months
-ax3_1.set_xticks(np.arange(0, 6*5, 5)+2)
-ax3_1.set_xticklabels(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'], rotation=0)
-ax3_1.set_xlabel('Month')
-# change the yticks and labels to only show the weekday
-ax3_1.set_yticklabels(['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], rotation=0)
-ax3_1.set_ylabel('Weekday')
-ax3_1.set_title('Total Working Time')
+# # TODO: add a heatmap for total task time and fix the xlabel issue
+# # Create the heatmap
+# fig3_1, ax3_1 = plt.subplots(figsize=(12, 2.2))
+# sns.heatmap(create_heatmap('TotalTime'), cmap='YlGnBu', linewidths=0.5, ax=ax3_1)
+# # change the number of xticks as the number of months
+# ax3_1.set_xticks(np.arange(0, 6*5, 5)+2)
+# ax3_1.set_xticklabels(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'], rotation=0)
+# ax3_1.set_xlabel('Month')
+# # change the yticks and labels to only show the weekday
+# ax3_1.set_yticklabels(['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], rotation=0)
+# ax3_1.set_ylabel('Weekday')
+# ax3_1.set_title('Total Working Time')
 
-fig3_2, ax3_2 = plt.subplots(figsize=(12, 2.2))
-sns.heatmap(create_heatmap('ProductivityRating (1-5)'), cmap='YlGnBu', linewidths=0.5, ax=ax3_2)
-# change the number of xticks as the number of months
-ax3_2.set_xticks(np.arange(0, 6*5, 5)+2)
-ax3_2.set_xticklabels(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'], rotation=0)
-ax3_2.set_xlabel('Month')
-# change the yticks and labels to only show the weekday
-ax3_2.set_yticklabels(['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], rotation=0)
-ax3_2.set_ylabel('Weekday')
-ax3_2.set_title('Productivity Rating') 
+# fig3_2, ax3_2 = plt.subplots(figsize=(12, 2.2))
+# sns.heatmap(create_heatmap('ProductivityRating (1-5)'), cmap='YlGnBu', linewidths=0.5, ax=ax3_2)
+# # change the number of xticks as the number of months
+# ax3_2.set_xticks(np.arange(0, 6*5, 5)+2)
+# ax3_2.set_xticklabels(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'], rotation=0)
+# ax3_2.set_xlabel('Month')
+# # change the yticks and labels to only show the weekday
+# ax3_2.set_yticklabels(['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], rotation=0)
+# ax3_2.set_ylabel('Weekday')
+# ax3_2.set_title('Productivity Rating') 
+
 
 if show_fig3:
     st.markdown("### Calendar heatmap")
