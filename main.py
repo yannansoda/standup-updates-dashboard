@@ -6,7 +6,8 @@
 # date: 2023-03-02
 
 # streamlit run /Users/su/DS-projects/standup-updates-dashboard/main.py
-# """
+# Note: the streamlit deployment is only compatible with calmap using Python 3.7, because calmap uses the old version of pandas.
+
 
 import numpy as np
 import pandas as pd
